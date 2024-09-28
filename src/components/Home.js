@@ -1,24 +1,31 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import './Home.css'
+import '../styling/Home.css';
+import { ClipLoader } from 'react-spinners';
 
 function Home() {
     const [text, setText] = useState('');
     const [analyzerType, setAnalyzerType] = useState("basic");
     const [result, setResult] = useState(null);
     const [error, setError] = useState(null);
+    const [isLoading, setIsLoading] = useState(false);
 
     const analyzeClick = async () => {
+        setIsLoading(true);
         try {
-            const response = await axios.post('/analysis/analyze/', {text:text, analyzer_type:analyzerType});
+            const response = await axios.post('http://127.0.0.1:8000/analyze/analyze/', {text:text, analyzer_type:analyzerType});
             setResult(response.data)
         } catch (error) {
             setError("Error Analyzing Text")
-        } 
+        } finally {
+            setIsLoading(false);
+        }
     };
 
     const renderResult = () => {
-        if (result) {
+        if (isLoading) {
+            return <ClipLoader color={"#60fc05"} loading={isLoading} size={50} />;
+        } else if (result) {
             return (
                 <div>
                     <h2>Result</h2>

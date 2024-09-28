@@ -1,9 +1,9 @@
 import logo from './logo.svg';
 import './App.css';
-import Home from './components/Home/Home';
-import Description from './components/Description/Description'
-import History from './components/History/History'
-import Navbar from './components/Navbar/Navbar'
+import Home from './components/Home';
+import Description from './components/Description';
+import History from './components/History';
+import Navbar from './components/Navbar';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 
 function App() {
