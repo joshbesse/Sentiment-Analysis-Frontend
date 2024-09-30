@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import '../styling/History.css';
+import API_BASE_URL from '../api';
 
 function History() {
     const [history, setHistory] = useState([]);
@@ -9,7 +10,7 @@ function History() {
     useEffect(() => {
         const fetchHistory = async () => {
             try {
-                const response = await axios.get('http://127.0.0.1:8000/analyze/history/');
+                const response = await axios.get(`${API_BASE_URL}/analyze/history`);
                 setHistory(response.data)
             } catch (error) {
                 setError("Error Fetching History")

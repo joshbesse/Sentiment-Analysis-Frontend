@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import '../styling/Home.css';
 import { ClipLoader } from 'react-spinners';
+import API_BASE_URL from '../api';
 
 function Home() {
     const [text, setText] = useState('');
@@ -13,7 +14,7 @@ function Home() {
     const analyzeClick = async () => {
         setIsLoading(true);
         try {
-            const response = await axios.post('http://127.0.0.1:8000/analyze/analyze/', {text:text, analyzer_type:analyzerType});
+            const response = await axios.post(`${API_BASE_URL}/analyze/analyze`, {text:text, analyzer_type:analyzerType});
             setResult(response.data)
         } catch (error) {
             setError("Error Analyzing Text")
