@@ -4,7 +4,7 @@ import '../styling/History.css';
 
 function History() {
     const [history, setHistory] = useState([]);
-    const [error, setError] = useState(null);
+    const [setError] = useState(null);
 
     useEffect(() => {
         const fetchHistory = async () => {
