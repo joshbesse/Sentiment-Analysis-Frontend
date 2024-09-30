@@ -17,7 +17,7 @@ function History() {
         };
 
         fetchHistory();
-    }, []);
+    }, [setError]);
 
     return (
         <div className='history'>
