@@ -6,6 +6,7 @@ import API_BASE_URL from '../api';
 function History() {
     const [history, setHistory] = useState([]);
     const [error, setError] = useState(null);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const fetchHistory = async () => {
@@ -14,6 +15,8 @@ function History() {
                 setHistory(response.data)
             } catch (error) {
                 setError("Error Fetching History")
+            } finally {
+                setLoading(false);
             }
         };
 
@@ -23,16 +26,27 @@ function History() {
     return (
         <div className='history'>
             <h1>Analysis History</h1>
-            <ol>
-                {history.map((item, index) => (
-                    <li key={index}>
-                        <p>Analyzer: {item.analyzer}</p>
-                        <p>Text: {item.text}</p>
-                        <p>Sentiment: {item.sentiment}</p>
-                        <p>Score: {item.score}</p>
-                    </li>
-                ))}
-            </ol>
+            
+            {loading && <p>Loading...</p>}
+            
+            {error && <p className='error'>{error}</p>}
+            
+            {!loading && !error && history.length > 0 && (
+                <ol>
+                    {history.map((item) => (
+                        <li key={item.id}> 
+                            <p><strong>Analyzer:</strong> {item.analyzer}</p>
+                            <p><strong>Text:</strong> {item.text}</p>
+                            <p><strong>Sentiment:</strong> {item.sentiment}</p>
+                            <p><strong>Score:</strong> {item.score}</p>
+                        </li>
+                    ))}
+                </ol>
+            )}
+
+            {!loading && !error && history.length === 0 && (
+                <p>No analysis history available.</p>
+            )}
         </div>
     );
 }
