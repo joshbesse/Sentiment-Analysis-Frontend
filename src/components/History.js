@@ -5,12 +5,12 @@ import API_BASE_URL from '../api';
 
 function History() {
     const [history, setHistory] = useState([]);
-    const [setError] = useState(null);
+    const [error, setError] = useState(null);
 
     useEffect(() => {
         const fetchHistory = async () => {
             try {
-                const response = await axios.get(`${API_BASE_URL}/history/`);
+                const response = await axios.get(`${API_BASE_URL}/analyze/history/`);
                 setHistory(response.data)
             } catch (error) {
                 setError("Error Fetching History")
@@ -18,7 +18,7 @@ function History() {
         };
 
         fetchHistory();
-    }, [setError]);
+    }, []);
 
     return (
         <div className='history'>
