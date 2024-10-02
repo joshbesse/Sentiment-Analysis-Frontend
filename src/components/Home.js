@@ -14,7 +14,7 @@ function Home() {
     const analyzeClick = async () => {
         setIsLoading(true);
         try {
-            const response = await axios.post(`${API_BASE_URL}/analyze/`, {text:text, analyzer_type:analyzerType});
+            const response = await axios.post(`${API_BASE_URL}/analyze/`, {text:text, analyzer_type:analyzerType}, { timeout: 120000});
             setResult(response.data)
         } catch (error) {
             setError("Error Analyzing Text")
