@@ -11,14 +11,49 @@ function Home() {
     const [error, setError] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
 
+    // Function to poll the task status
+    const pollTaskStatus = async (taskId) => {
+        try {
+            const statusResponse = await axios.get(`${API_BASE_URL}/task_status/${taskId}/`);
+            const statusData = statusResponse.data;
+
+            if (statusData.status === 'SUCCESS') {
+                // If the task is successful, update the result state
+                setResult({ sentiment: statusData.sentiment, score: statusData.score });
+                setIsLoading(false);
+            } else if (statusData.status === 'FAILURE') {
+                // If the task failed, set the error message
+                setError('Error analyzing text.');
+                setIsLoading(false);
+            } else {
+                // If the task is still pending, wait and poll again
+                setTimeout(() => pollTaskStatus(taskId), 2000);
+            }
+        } catch (error) {
+            setError('Error fetching task status.');
+            setIsLoading(false);
+        }
+    };
+
+    // Modified analyzeClick to handle the asynchronous nature of Celery
     const analyzeClick = async () => {
         setIsLoading(true);
+        setError(null);
+        setResult(null);
         try {
-            const response = await axios.post(`${API_BASE_URL}/analyze/`, {text:text, analyzer_type:analyzerType}, { timeout: 120000});
-            setResult(response.data)
+            // Send the analysis request
+            const response = await axios.post(`${API_BASE_URL}/analyze/`, { text: text, analyzer_type: analyzerType });
+            
+            if (response.status === 202) {
+                const taskId = response.data.task_id;
+                // Poll the task status using the task ID
+                pollTaskStatus(taskId);
+            } else {
+                setError('Unexpected response from the server.');
+                setIsLoading(false);
+            }
         } catch (error) {
-            setError("Error Analyzing Text")
-        } finally {
+            setError('Error analyzing text.');
             setIsLoading(false);
         }
     };
@@ -61,7 +96,7 @@ function Home() {
                 <div className='textarea_container'>
                     <textarea value={text} onChange={(e) => setText(e.target.value)} placeholder='Enter text to analyze.'/>
                     <button id='button' onClick={analyzeClick}>Analyze</button>
-                    </div>
+                </div>
                 <div className='result_container'>
                     {renderResult()}
                 </div>
