@@ -11,7 +11,7 @@ function History() {
     useEffect(() => {
         const fetchHistory = async () => {
             try {
-                const response = await axios.get(`${API_BASE_URL}/analyze/history/`);
+                const response = await axios.get(`${API_BASE_URL}/api/history/`);
                 setHistory(response.data)
             } catch (error) {
                 setError("Error Fetching History")

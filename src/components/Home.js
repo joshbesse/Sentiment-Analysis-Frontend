@@ -14,7 +14,7 @@ function Home() {
     // Function to poll the task status
     const pollTaskStatus = async (taskId) => {
         try {
-            const statusResponse = await axios.get(`${API_BASE_URL}/task_status/${taskId}/`);
+            const statusResponse = await axios.get(`${API_BASE_URL}/api/task_status/${taskId}/`);
             const statusData = statusResponse.data;
 
             if (statusData.status === 'SUCCESS') {
@@ -42,7 +42,7 @@ function Home() {
         setResult(null);
         try {
             // Send the analysis request
-            const response = await axios.post(`${API_BASE_URL}/analyze/`, { text: text, analyzer_type: analyzerType });
+            const response = await axios.post(`${API_BASE_URL}/api/`, { text: text, analyzer_type: analyzerType });
             
             if (response.status === 202) {
                 const taskId = response.data.task_id;
